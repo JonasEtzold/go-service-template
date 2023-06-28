@@ -1,0 +1,10 @@
+#!/bin/sh
+
+source './bin/strict-mode'
+
+if [ -f '/vault/secrets/secrets' ]; then
+  echo "-- Sourcing secrets --"
+  source '/vault/secrets/secrets'
+fi
+
+./service

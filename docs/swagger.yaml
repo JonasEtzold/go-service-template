@@ -1,0 +1,255 @@
+basePath: /
+definitions:
+  example.Example:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      text:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  http_err.HTTPError:
+    properties:
+      code:
+        example: 400
+        type: integer
+      message:
+        example: status bad request
+        type: string
+    type: object
+info:
+  contact:
+    email: jonas.etzold@beeyou.de
+    name: Jonas Etzold
+  description: A template for generating a Go backend API service
+  license:
+    name: WTFPL
+    url: http://www.wtfpl.net/txt/copying/
+  title: Go Service Template
+  version: "1.0"
+paths:
+  /api/v1/example:
+    delete:
+      description: Deletes an existing example based on the given ID.
+      parameters:
+      - description: Example ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/http_err.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/http_err.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http_err.HTTPError'
+      security:
+      - Authorization Token: []
+      summary: Deletes an example
+    get:
+      description: Get Example based on example name or text provided as body JSON
+      parameters:
+      - description: Name
+        in: body
+        name: name
+        schema:
+          type: string
+      - description: Text
+        in: body
+        name: text
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/example.Example'
+              type: array
+            type: array
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/http_err.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/http_err.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http_err.HTTPError'
+      security:
+      - Authorization Token: []
+      summary: Retrieves example based on query
+    post:
+      description: Create an example with a name and a descriptive text.
+      parameters:
+      - description: Name
+        in: body
+        name: name
+        required: true
+        schema:
+          type: string
+      - description: Text
+        in: body
+        name: text
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/example.Example'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http_err.HTTPError'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/http_err.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http_err.HTTPError'
+      security:
+      - Authorization Token: []
+      summary: Creates an example
+    put:
+      description: Updates an existing example with a name and a descriptive text
+        based on the given ID.
+      parameters:
+      - description: Example ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Name
+        in: body
+        name: name
+        required: true
+        schema:
+          type: string
+      - description: Text
+        in: body
+        name: text
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/example.Example'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/http_err.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/http_err.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http_err.HTTPError'
+      security:
+      - Authorization Token: []
+      summary: Updates an example
+  /api/v1/example/{id}:
+    get:
+      description: get Example by ID
+      parameters:
+      - description: Example ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/example.Example'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/http_err.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/http_err.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http_err.HTTPError'
+      security:
+      - Authorization Token: []
+      summary: Retrieves example based on given ID
+  /api/v1/login:
+    post:
+      description: provides an authorization token for any user with valid master
+        password. Only dummy, don't use in production.
+      parameters:
+      - description: Username
+        in: body
+        name: username
+        required: true
+        schema:
+          type: string
+      - description: Password
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/http_err.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http_err.HTTPError'
+      security:
+      - Authorization Token: []
+      summary: Logins an example API user
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
